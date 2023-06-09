@@ -15,12 +15,13 @@ app.use(cors());
 app.use(express.json());
 
 //ruta statica
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static('./src/uploads'));
 
 //Carga de archivo
 app.use(fileUpload({
     useTempFiles : true,
-    tempFileDir : '/tmp/'
+    tempFileDir : '/tmp/',
+    createParentPath: true
 }));
 
 //Base de datos

@@ -1,32 +1,44 @@
 import fs from 'fs';
 import { Request, Response } from 'express';
 import { deleteKey, getKeys, insertKey, updateKey } from '../services/item.service';
+import { uploadFile } from '../helper';
+import item from '../models/item';
 
 const createKey = async (req: Request, res: Response) => {
     try {
-        const { file } = req;
 
-        if (!file) {
-            return res.status(400).json({
-                ok: false,
-                msg: 'No file uploaded'
-            });
-        }
+        const { name, description, receivedBy } = req.body;
+
+        if (!req.files || Object.keys(req.files).length === 0 || !req.files.image) {
+            return res.status(400).send('No files were uploaded.');
+          }
+          
+        
+          const nameFile = await uploadFile(req.files as any);
+
+          const responseItem = await item.create({
+                name,
+                description,
+                receivedBy,
+                image: nameFile
+          });
+
+          res.status(200).json({
+            ok: true,
+            key: responseItem,
+            msg: `Llave creada con exito ${nameFile}`,    
+          })
 
 
+         
         
 
-        const responseItem = await insertKey(req.body, file);
-        res.status(200).json({
-            ok: true,
-            msg: 'Key created',
-            key: responseItem
-        })
-
+    
     } catch (error) {
+        console.log(error);
         res.status(500).json({
             ok: false,
-            msg: 'Error inesperado'
+            msg: 'Error inesperado al crear la llave'
         });
     }
 
@@ -36,14 +48,7 @@ const updateItem = async (req: Request, res: Response) => {
     try {
                 
         if(req.file){
-            console.log(req.body);
-           // fs.unlinkSync(`uploads/${req.body.image}`);
-            // const responseItem = await updateKey(req.params.id, req.body, req.file);
-            // return res.status(200).json({
-            //     ok: true,
-            //     msg: 'Llave actualizada',
-            //     key: responseItem
-            // });
+
 
             res.status(200).json({});
         }

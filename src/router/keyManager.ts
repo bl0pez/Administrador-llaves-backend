@@ -5,7 +5,7 @@ import multerMiddleware from '../middleware/uploadFile';
 const router = Router();
 
 router.post('/', createKey);
-router.put('/:id', multerMiddleware.single('image'), updateItem);
+router.put('/:id', updateItem);
 router.get('/', getItems);
 router.delete('/:id', deleteItem);
 
