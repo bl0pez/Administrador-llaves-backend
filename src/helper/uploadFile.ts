@@ -1,7 +1,6 @@
-import { NextFunction, Request, Response } from 'express';
+import path from 'path';
 import { UploadedFile } from "express-fileupload";
 import { v4 as uuidv4 } from 'uuid';
-import path from 'path';
 
 
 interface IFile{

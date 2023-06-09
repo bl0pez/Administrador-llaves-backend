@@ -1,39 +1,37 @@
+import path from 'path';
 import fs from 'fs';
 import { Request, Response } from 'express';
 import { deleteKey, getKeys, insertKey, updateKey } from '../services/item.service';
 import { uploadFile } from '../helper';
-import item from '../models/item';
+import Item from '../models/item';
+import { Key } from '../interface/key.interface';
+import { IKey } from '../middleware/checkId';
 
 const createKey = async (req: Request, res: Response) => {
     try {
 
         const { name, description, receivedBy } = req.body;
 
-        if (!req.files || Object.keys(req.files).length === 0 || !req.files.image) {
-            return res.status(400).send('No files were uploaded.');
-          }
-          
-        
-          const nameFile = await uploadFile(req.files as any);
+        const nameFile = await uploadFile(req.files as any);
 
-          const responseItem = await item.create({
-                name,
-                description,
-                receivedBy,
-                image: nameFile
-          });
+        const responseItem = await Item.create({
+            name,
+            description,
+            receivedBy,
+            image: nameFile
+        });
 
-          res.status(200).json({
+        res.status(200).json({
             ok: true,
             key: responseItem,
-            msg: `Llave creada con exito ${nameFile}`,    
-          })
+            msg: `Llave creada con exito ${nameFile}`,
+        })
 
 
-         
-        
 
-    
+
+
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -46,21 +44,45 @@ const createKey = async (req: Request, res: Response) => {
 
 const updateItem = async (req: Request, res: Response) => {
     try {
-                
-        if(req.file){
+
+        //Extraemos los datos del middleware y del body
+        const { key, body } = req as IKey;
+
+        console.log(key.image);
 
 
-            res.status(200).json({});
+
+        if (req.files) {
+
+            //Creamos el path de la imagen
+            const pathImage = path.join(__dirname, '..', 'uploads', key.image);
+
+            //Eliminamos la imagen anterior
+            fs.unlinkSync(pathImage);
+
+            //Subimos la nueva imagen
+            const nameFile = await uploadFile(req.files as any);
+            req.body.image = nameFile;
+
+            //Actualizamos la llave
+            const newItem = await Item.findByIdAndUpdate(req.params.id, req.body, { new: true });
+
+            return res.status(200).json({
+                ok: true,
+                msg: 'Llave actualizada',
+                key: newItem
+            });
+
         }
 
-        const responseItem = await updateKey(req.params.id, req.body);
-        res.status(200).json({
+        const newItem = await Item.findByIdAndUpdate(req.params.id, req.body, { new: true });
+
+        return res.status(200).json({
             ok: true,
             msg: 'Llave actualizada',
-            key: responseItem
-        });
-        
-            
+            key: newItem
+        })
+
 
     } catch (error) {
         console.log(error);
@@ -73,14 +95,14 @@ const updateItem = async (req: Request, res: Response) => {
 
 const getItems = async (req: Request, res: Response) => {
     try {
-        
+
         const response = await getKeys();
         res.status(200).json({
-            keys:response
+            keys: response
         });
 
     } catch (error) {
-        
+
         res.status(500).json({
             ok: false,
             msg: 'Error inesperado'
@@ -97,14 +119,14 @@ const getItems = async (req: Request, res: Response) => {
  */
 const deleteItem = async (req: Request, res: Response) => {
     try {
-        
+
         const response = await deleteKey(req.params.id);
-        
-        if(response!.image){
+
+        if (response!.image) {
             fs.unlinkSync(`uploads/${response!.image}`);
         }
-        
-        
+
+
         res.status(200).json({
             ok: true,
             msg: 'Key deleted',
@@ -112,7 +134,7 @@ const deleteItem = async (req: Request, res: Response) => {
         });
 
     } catch (error) {
-        
+
         res.status(500).json({
             ok: false,
             msg: 'Error inesperado'
