@@ -120,12 +120,14 @@ const getItems = async (req: Request, res: Response) => {
 const deleteItem = async (req: Request, res: Response) => {
     try {
 
-        const response = await deleteKey(req.params.id);
+        const { key } = req as IKey;
+        const pathImage = path.join(__dirname, '..', 'uploads', key.image);
+        const response = await Item.findByIdAndDelete(req.params.id);
 
         if (response!.image) {
-            fs.unlinkSync(`uploads/${response!.image}`);
+            fs.unlinkSync(pathImage);
         }
-
+        
 
         res.status(200).json({
             ok: true,

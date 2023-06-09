@@ -14,6 +14,8 @@ router.put('/:id',[
 
 
 router.get('/', getItems);
-router.delete('/:id', deleteItem);
+router.delete('/:id', [
+    checkId,
+],deleteItem);
 
 export default router;
