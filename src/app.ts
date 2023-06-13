@@ -5,6 +5,7 @@ import cors from 'cors';
 import fileUpload from 'express-fileupload';
 
 import keyManager from './router/keyManager';
+import authRouter from './router/auth';
 import dbConnect from "../config/mongo";
 
 const PORT = process.env.PORT || 3000;
@@ -29,6 +30,7 @@ dbConnect();
 
 //Routes
 app.use('/api/keys', keyManager);
+app.use('/api', authRouter);
 
 app.listen(PORT, () => {
     console.log(`http://localhost:${PORT}`);

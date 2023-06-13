@@ -27,5 +27,9 @@ Actualiza una llave por su id
 #### DELETE /api/keys/:id
 Elimina una llave por su id
 
-### Usuarios
-Proximamente
+#
+
+## Usuarios
+
+#### POST /api/register
+Crea un nuevo usuario
