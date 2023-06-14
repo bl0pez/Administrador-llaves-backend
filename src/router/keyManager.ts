@@ -1,8 +1,13 @@
 import { Router } from 'express';
 import { createKey, deleteItem, getItems, updateItem } from '../controllers/keyManager';
-import { checkId, validateFile } from '../middleware';
+import { checkId, checkJwt, validateFile } from '../middleware';
 
 const router = Router();
+
+router.get('/', getItems);
+
+
+router.use( checkJwt );
 
 router.post('/', [
     validateFile,
@@ -13,7 +18,6 @@ router.put('/:id',[
 ],updateItem);
 
 
-router.get('/', getItems);
 router.delete('/:id', [
     checkId,
 ],deleteItem);

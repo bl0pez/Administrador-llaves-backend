@@ -1,10 +1,9 @@
 import path from 'path';
 import fs from 'fs';
 import { Request, Response } from 'express';
-import { deleteKey, getKeys, insertKey, updateKey } from '../services/item.service';
+import { getKeys } from '../services/item.service';
 import { uploadFile } from '../helper';
 import Item from '../models/item';
-import { Key } from '../interface/key.interface';
 import { IKey } from '../middleware/checkId';
 
 const createKey = async (req: Request, res: Response) => {
@@ -96,7 +95,8 @@ const updateItem = async (req: Request, res: Response) => {
 const getItems = async (req: Request, res: Response) => {
     try {
 
-        const response = await getKeys();
+        //Obtenemos las llaves de la base de datos por orden de la mas nueva a la mas vieja
+        const response = await Item.find().sort({ _id: -1 });
         res.status(200).json({
             keys: response
         });
@@ -131,7 +131,7 @@ const deleteItem = async (req: Request, res: Response) => {
 
         res.status(200).json({
             ok: true,
-            msg: 'Key deleted',
+            msg: `Llave eliminada con exito, ${key.name}`,
             key: response
         });
 
