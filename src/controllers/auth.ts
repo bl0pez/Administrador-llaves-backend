@@ -3,11 +3,7 @@ import User from '../models/user';
 import { comparePassword, encryptPassword } from '../helper/bcrypt';
 import { generateToken } from '../helper/jwt';
 import { JwtPayload } from 'jsonwebtoken';
-
-interface ExtendedRequest extends Request {
-    user?: string | JwtPayload;
-}
-
+import { UserRequest } from '../interface/request.interface';
 
 const registerCtrl = async (req: Request, res: Response) => {
 
@@ -95,7 +91,7 @@ const loginCtrl = async (req: Request, res: Response) => {
 
 }
 
-const validateCtrl = async (req: ExtendedRequest, res: Response) => {
+const validateCtrl = async (req: UserRequest, res: Response) => {
     //Mandamos el user
     const user = await User.findById(req.user);
 
@@ -114,27 +110,7 @@ const validateCtrl = async (req: ExtendedRequest, res: Response) => {
         ok: true,
         user,
         token
-    })
-    
-
-    //Buscamos el usuario por el id
-    // const user = await User.findById(req.user);
-
-    // if(!user){
-    //     return res.status(400).json({
-    //         ok: false,
-    //         msg: 'El usuario no existe'
-    //     });
-    // }
-
-    //Mantenemos la sesion activa
-    // const token = await generateToken(user.id);
-
-    // res.status(200).json({
-    //     ok: true,
-    //     user,
-    //     token
-    // });
+    });
 
 }
 
