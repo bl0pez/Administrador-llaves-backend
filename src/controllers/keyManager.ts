@@ -1,10 +1,10 @@
+import { Request, Response } from 'express';
 import path from 'path';
 import fs from 'fs';
-import { Request, Response } from 'express';
 import { uploadFile } from '../helper';
 import Item from '../models/item';
-import { IKey } from '../middleware/checkId';
 import { URequest } from '../interface/request.interface';
+import { ExtReqKey, Key } from '../interface';
 
 const createKey = async (req: URequest, res: Response) => {
     try {
@@ -41,20 +41,12 @@ const createKey = async (req: URequest, res: Response) => {
 
 }
 
-const updateItem = async (req: Request, res: Response) => {
+const updateItem = async (req: ExtReqKey, res: Response) => {
     try {
-
-        //Extraemos los datos del middleware y del body
-        const { key, body } = req as IKey;
-
-        console.log(key.image);
-
-
-
         if (req.files) {
 
             //Creamos el path de la imagen
-            const pathImage = path.join(__dirname, '..', 'uploads', key.image);
+            const pathImage = path.join(__dirname, '..', 'uploads', req.key?.image as string);
 
             //Eliminamos la imagen anterior
             fs.unlinkSync(pathImage);
@@ -119,11 +111,11 @@ const getItems = async (req: Request, res: Response) => {
  * @param req 
  * @param res 
  */
-const deleteItem = async (req: Request, res: Response) => {
+const deleteItem = async (req: ExtReqKey, res: Response) => {
     try {
 
-        const { key } = req as IKey;
-        const pathImage = path.join(__dirname, '..', 'uploads', key.image);
+        const { key } = req;
+        const pathImage = path.join(__dirname, '..', 'uploads', key?.image as string);
         const response = await Item.findByIdAndDelete(req.params.id);
 
         if (response!.image) {
@@ -133,7 +125,7 @@ const deleteItem = async (req: Request, res: Response) => {
 
         res.status(200).json({
             ok: true,
-            msg: `Llave eliminada con exito, ${key.name}`,
+            msg: `Llave eliminada con exito, ${key?.name}`,
             key: response
         });
 

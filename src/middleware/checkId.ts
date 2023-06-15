@@ -1,12 +1,8 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Response } from 'express';
 import Item from '../models/item';
-import { Key } from '../interface/key.interface';
+import { ExtReqKey } from '../interface';
 
-export interface IKey extends Request {
-    key: Key
-}
-
-export const checkId = async(req: Request, res: Response, next: NextFunction) => {
+export const checkId = async(req: ExtReqKey, res: Response, next: NextFunction) => {
     //Verificamos que tenga el id
     if (!req.params.id) {
         return res.status(400).json({
@@ -34,7 +30,7 @@ export const checkId = async(req: Request, res: Response, next: NextFunction) =>
     }
 
     //Guardamos la llave en el request
-    (req as IKey).key = key;
+    req.key = key;
     next();
 
 

@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import User from '../models/user';
 import { comparePassword, encryptPassword } from '../helper/bcrypt';
 import { generateToken } from '../helper/jwt';
-import { JwtPayload } from 'jsonwebtoken';
 import { UserRequest } from '../interface/request.interface';
 
 const registerCtrl = async (req: Request, res: Response) => {
