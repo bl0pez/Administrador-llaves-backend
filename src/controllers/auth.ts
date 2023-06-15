@@ -37,9 +37,11 @@ const registerCtrl = async (req: Request, res: Response) => {
         })
 
     } catch (error) {
+        console.log(error);
+        
         res.status(500).json({
             ok: false,
-            msg: 'Error en el servidor'
+            msg: 'Registro fallido'
         });
     }
 

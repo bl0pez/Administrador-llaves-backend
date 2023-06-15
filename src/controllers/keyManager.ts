@@ -1,22 +1,22 @@
 import path from 'path';
 import fs from 'fs';
 import { Request, Response } from 'express';
-import { getKeys } from '../services/item.service';
 import { uploadFile } from '../helper';
 import Item from '../models/item';
 import { IKey } from '../middleware/checkId';
+import { URequest } from '../interface/request.interface';
 
-const createKey = async (req: Request, res: Response) => {
+const createKey = async (req: URequest, res: Response) => {
     try {
 
-        const { name, description, receivedBy } = req.body;
+        const { name, description } = req.body;
 
         const nameFile = await uploadFile(req.files as any);
 
         const responseItem = await Item.create({
             name,
             description,
-            receivedBy,
+            user: req.user?._id,
             image: nameFile
         });
 
@@ -96,8 +96,10 @@ const getItems = async (req: Request, res: Response) => {
     try {
 
         //Obtenemos las llaves de la base de datos por orden de la mas nueva a la mas vieja
-        const response = await Item.find().sort({ _id: -1 });
+        const response = await Item.find().sort({ _id: -1 }).populate('user', 'name');
         res.status(200).json({
+            ok: true,
+            msg: 'Llaves obtenidas con exito',
             keys: response
         });
 

@@ -1,14 +1,15 @@
-import { NextFunction, Request, Response } from 'express';
-import { verifyToken } from '../helper/jwt';
-import { UserRequest, JwtDecoded } from '../interface/request.interface';
-import jwt from 'jsonwebtoken';
+import { NextFunction, Response } from 'express';
 
-export const checkJwt = async(req: UserRequest, res: Response, next: NextFunction) => {
+import User from '../models/user';
+import { verifyToken } from '../helper/jwt';
+import { URequest } from '../interface/request.interface';
+
+export const checkJwt = async(req: URequest, res: Response, next: NextFunction) => {
     try {
         
         //Obtenemos el token
         const token = req.headers.authorization || '';
-
+        
         //Verificamos que el token exista
         if(!token){
             return res.status(401).json({
@@ -18,19 +19,22 @@ export const checkJwt = async(req: UserRequest, res: Response, next: NextFunctio
         }
 
         //Verificamos que el token sea válido
-        const payload = token.split(' ')[1];
-        const isUser = await verifyToken(payload);
-        const { _id } = jwt.decode(payload) as JwtDecoded;
+        const payload = await verifyToken(token);
 
-        if(!isUser){
+        //Buscamos el usuario en la BD
+        const user = await User.findById(payload._id);
+
+        //Verificamos que el usuario exista
+        if(!user){
             return res.status(401).json({
                 ok: false,
-                msg: 'Token no válido'
+                msg: 'Token no válido - usuario no existe en la BD'
             });
         }
 
-        //Agregamos el id del usuario a la request
-        req.user = _id;
+        
+        //Enviamos el usuario en la petición
+        req.user = user;
         next();
 
 

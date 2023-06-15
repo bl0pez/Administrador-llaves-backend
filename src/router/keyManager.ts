@@ -1,17 +1,17 @@
 import { Router } from 'express';
 import { createKey, deleteItem, getItems, updateItem } from '../controllers/keyManager';
-import { checkId, checkJwt, validateFile } from '../middleware';
+import { checkId, validateFile } from '../middleware';
+import { hasRole } from '../middleware/validateRol';
+import { checkJwt } from '../middleware/session';
 
 const router = Router();
 
 router.get('/', getItems);
 
+router.use(checkJwt);
+router.use(hasRole('ADMIN_ROLE'));
 
-router.use( checkJwt );
-
-router.post('/', [
-    validateFile,
-],createKey);
+router.post('/', createKey);
 
 router.put('/:id',[
     checkId,
