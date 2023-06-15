@@ -33,3 +33,9 @@ Elimina una llave por su id
 
 #### POST /api/register
 Crea un nuevo usuario
+
+#### POST /api/login
+Inicia sesión
+
+#### GET api/validate
+Refresca la sesión
