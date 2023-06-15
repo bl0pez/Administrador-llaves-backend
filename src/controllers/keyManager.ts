@@ -56,7 +56,7 @@ const updateItem = async (req: ExtReqKey, res: Response) => {
             req.body.image = nameFile;
 
             //Actualizamos la llave
-            const newItem = await Item.findByIdAndUpdate(req.params.id, req.body, { new: true });
+            const newItem = await Item.findByIdAndUpdate(req.params.id, req.body, { new: true }).populate('user', 'name');           
 
             return res.status(200).json({
                 ok: true,
@@ -66,7 +66,7 @@ const updateItem = async (req: ExtReqKey, res: Response) => {
 
         }
 
-        const newItem = await Item.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const newItem = await Item.findByIdAndUpdate(req.params.id, req.body, { new: true }).populate('user', 'name');
 
         return res.status(200).json({
             ok: true,
