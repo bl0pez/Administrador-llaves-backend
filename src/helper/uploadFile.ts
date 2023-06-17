@@ -1,6 +1,8 @@
 import path from 'path';
-import { UploadedFile } from "express-fileupload";
 import { v4 as uuidv4 } from 'uuid';
+
+import { UploadedFile } from 'express-fileupload';
+import fs from 'fs';
 
 
 interface IFile{
@@ -8,7 +10,7 @@ interface IFile{
 }
 
 /**
- * 
+ * Valida las extensiones de un archivo y lo sube a la carpeta uploads
  * @param file - Archivo a subir
  * @param validExtension - Extensiones validas
  * @param folder - Carpeta donde se guardara el archivo
@@ -47,5 +49,19 @@ export const uploadFile = (file: IFile, validExtension: string[] = ['png', 'jpg'
         });
 
     });
+
+}
+/**
+ * Elimina un archivo de la carpeta uploads
+ * @param nameFile - Nombre del archivo a eliminar
+ * @param folder - Carpeta donde se encuentra el archivo
+ */
+export const deleteFile = (nameFile: string, folder: string = '') => {
+
+    //Creamos el path de la imagen
+    const pathImage = path.join(__dirname, '..', 'uploads', folder, nameFile);
+
+    //Eliminamos la imagen anterior
+    fs.unlinkSync(pathImage);
 
 }

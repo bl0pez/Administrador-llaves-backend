@@ -1,7 +1,7 @@
-import { Schema, model } from "mongoose";
-import { Auth } from "../interface/auth.interface";
+import { Schema, model } from 'mongoose';
+import { User } from '../interface';
 
-const UserSchema = new Schema<Auth>({
+const UserSchema = new Schema<User>({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
@@ -17,4 +17,4 @@ UserSchema.methods.toJSON = function () {
     return user;
 }
 
-export default model<Auth>('User', UserSchema);
+export default model<User>('User', UserSchema);

@@ -1,10 +1,7 @@
 import { Request, Response } from 'express';
-import path from 'path';
-import fs from 'fs';
-import { uploadFile } from '../helper';
-import Item from '../models/item';
-import { URequest } from '../interface/request.interface';
-import { ExtReqKey, Key } from '../interface';
+import { ExtReqKey, URequest } from '../interface';
+import { deleteFile, uploadFile } from '../helper';
+import Keys from '../models/keys';
 
 const createKey = async (req: URequest, res: Response) => {
     try {
@@ -13,7 +10,7 @@ const createKey = async (req: URequest, res: Response) => {
 
         const nameFile = await uploadFile(req.files as any);
 
-        const responseItem = await Item.create({
+        const responseItem = await Keys.create({
             name,
             description,
             user: req.user?._id,
@@ -45,18 +42,17 @@ const updateItem = async (req: ExtReqKey, res: Response) => {
     try {
         if (req.files) {
 
-            //Creamos el path de la imagen
-            const pathImage = path.join(__dirname, '..', 'uploads', req.key?.image as string);
-
             //Eliminamos la imagen anterior
-            fs.unlinkSync(pathImage);
+            if(req.key?.image){
+                deleteFile(req.key?.image);
+            }
 
             //Subimos la nueva imagen
             const nameFile = await uploadFile(req.files as any);
             req.body.image = nameFile;
 
             //Actualizamos la llave
-            const newItem = await Item.findByIdAndUpdate(req.params.id, req.body, { new: true }).populate('user', 'name');           
+            const newItem = await Keys.findByIdAndUpdate(req.params.id, req.body, { new: true }).populate('user', 'name');           
 
             return res.status(200).json({
                 ok: true,
@@ -66,7 +62,7 @@ const updateItem = async (req: ExtReqKey, res: Response) => {
 
         }
 
-        const newItem = await Item.findByIdAndUpdate(req.params.id, req.body, { new: true }).populate('user', 'name');
+        const newItem = await Keys.findByIdAndUpdate(req.params.id, req.body, { new: true }).populate('user', 'name');
 
         return res.status(200).json({
             ok: true,
@@ -88,7 +84,7 @@ const getItems = async (req: Request, res: Response) => {
     try {
 
         //Obtenemos las llaves de la base de datos por orden de la mas nueva a la mas vieja
-        const response = await Item.find().sort({ _id: -1 }).populate('user', 'name');
+        const response = await Keys.find().sort({ _id: -1 }).populate('user', 'name');
         res.status(200).json({
             ok: true,
             msg: 'Llaves obtenidas con exito',
@@ -115,11 +111,10 @@ const deleteItem = async (req: ExtReqKey, res: Response) => {
     try {
 
         const { key } = req;
-        const pathImage = path.join(__dirname, '..', 'uploads', key?.image as string);
-        const response = await Item.findByIdAndDelete(req.params.id);
+        const response = await Keys.findByIdAndDelete(req.params.id);
 
         if (response!.image) {
-            fs.unlinkSync(pathImage);
+            deleteFile(response!.image);
         }
         
 
@@ -133,7 +128,7 @@ const deleteItem = async (req: ExtReqKey, res: Response) => {
 
         res.status(500).json({
             ok: false,
-            msg: 'Error inesperado'
+            msg: 'Error inesperado al eliminar la llave'
         });
 
     }

@@ -1,6 +1,7 @@
 import { NextFunction, Response } from 'express';
-import Item from '../models/item';
 import { ExtReqKey } from '../interface';
+
+import keys from '../models/keys';
 
 export const checkId = async(req: ExtReqKey, res: Response, next: NextFunction) => {
     //Verificamos que tenga el id
@@ -20,7 +21,7 @@ export const checkId = async(req: ExtReqKey, res: Response, next: NextFunction) 
     }
 
     //Verificamos que exista el id
-    const key = await Item.findById(req.params.id);
+    const key = await keys.findById(req.params.id);
 
     if(!key){
         return res.status(400).json({

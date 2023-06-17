@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import User from '../models/user';
 import { comparePassword, encryptPassword } from '../helper/bcrypt';
 import { generateToken } from '../helper/jwt';
-import { UserRequest } from '../interface/request.interface';
+import { URequest } from '../interface';
 
 const registerCtrl = async (req: Request, res: Response) => {
 
@@ -92,7 +92,7 @@ const loginCtrl = async (req: Request, res: Response) => {
 
 }
 
-const validateCtrl = async (req: UserRequest, res: Response) => {
+const validateCtrl = async (req: URequest, res: Response) => {
     //Mandamos el user
     const user = await User.findById(req.user);
 

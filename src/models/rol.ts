@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { Rol } from '../interface/auth.interface';
+import { Rol } from '../interface';
 
 
 const RolSchema = new Schema<Rol>({

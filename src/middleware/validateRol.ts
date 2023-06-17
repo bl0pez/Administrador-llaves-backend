@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from 'express';
-import { URequest } from '../interface/request.interface';
+import { NextFunction, Response } from 'express';
+import { URequest } from '../interface';
 
 export const hasRole = (...roles: string[]) => {
 

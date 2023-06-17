@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
-import { Key } from '../interface/key.interface';
+import { Key } from '../interface';
 
-const ItemSchema = new Schema<Key>({
+const KeySchema = new Schema<Key>({
     name: { type: String, required: true },
     description: { type: String, required: true },
     image: { type: String, required: false },
@@ -11,4 +11,4 @@ const ItemSchema = new Schema<Key>({
     versionKey: false
 });
 
-export default model<Key>('Key', ItemSchema);
+export default model<Key>('Key', KeySchema);

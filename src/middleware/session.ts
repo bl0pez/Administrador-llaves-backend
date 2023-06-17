@@ -2,7 +2,7 @@ import { NextFunction, Response } from 'express';
 
 import User from '../models/user';
 import { verifyToken } from '../helper/jwt';
-import { URequest } from '../interface/request.interface';
+import { URequest } from '../interface';
 
 export const checkJwt = async(req: URequest, res: Response, next: NextFunction) => {
     try {

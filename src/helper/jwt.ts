@@ -1,5 +1,5 @@
 import { sign, verify } from 'jsonwebtoken';
-import { JwtDecoded } from '../interface/request.interface';
+import { JwtDecoded } from '../interface';
 
 
 const JWT_SECRET = process.env.JWT_SECRET || 'secret';
