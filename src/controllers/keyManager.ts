@@ -15,7 +15,7 @@ const createKey = async (req: URequest, res: Response) => {
             description,
             user: req.user?._id,
             image: nameFile
-        });
+        }).then((item) => item.populate('user', 'name'));
 
         res.status(200).json({
             ok: true,

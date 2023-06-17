@@ -25,12 +25,25 @@ export interface Key {
     createdAt:   string;
     updatedAt:   string;
     image:      string;
+    status:      boolean;
 }
 
 //Modelo de rol
 export interface Rol {
     rol: string;
 }
+
+//Modelo de borrowed key
+export interface BorrowedKey {
+    _id:         string;
+    key:         Schema.Types.ObjectId;
+    user:        Schema.Types.ObjectId;
+    requestedBy: string;
+    service:     string;
+    createdAt:   string;
+    updatedAt:   string;
+    status:      boolean;
+} 
 
 export interface GetKeys {
     keys: Key[];
