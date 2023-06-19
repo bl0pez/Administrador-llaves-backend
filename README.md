@@ -39,3 +39,13 @@ Inicia sesión
 
 #### GET api/validate
 Refresca la sesión
+
+#
+
+### Llaves prestadas
+
+#### GET /api/borrowedKeys
+Obtiene todas las llaves prestadas
+
+#### POST /api/borrowedKeys/create
+Crea una nueva llave prestada

@@ -36,8 +36,8 @@ export interface Rol {
 //Modelo de borrowed key
 export interface BorrowedKey {
     _id:         string;
-    key:         Schema.Types.ObjectId;
-    user:        Schema.Types.ObjectId;
+    key:         Schema.Types.ObjectId;  
+    operator:    string;
     requestedBy: string;
     service:     string;
     createdAt:   string;

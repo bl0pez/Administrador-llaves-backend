@@ -6,6 +6,7 @@ import fileUpload from 'express-fileupload';
 
 import keyManager from './router/keyManager';
 import authRouter from './router/auth';
+import borrowedKey from './router/borrowedKey';
 import dbConnect from "../config/mongo";
 
 const PORT = process.env.PORT || 3000;
@@ -29,8 +30,9 @@ app.use(fileUpload({
 dbConnect();
 
 //Routes
-app.use('/api/keys', keyManager);
 app.use('/api', authRouter);
+app.use('/api/keys', keyManager);
+app.use('/api/borrowedKeys', borrowedKey);
 
 app.listen(PORT, () => {
     console.log(`http://localhost:${PORT}`);
