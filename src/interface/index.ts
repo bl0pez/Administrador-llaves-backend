@@ -43,7 +43,13 @@ export interface BorrowedKey {
     createdAt:   string;
     updatedAt:   string;
     status:      boolean;
-} 
+}
+
+//Interface para agregar borrowedKey al request
+export interface ExtReqBorrowedKey extends Request {
+    borrowedKey?: BorrowedKey;
+    key?: Key;
+}
 
 export interface GetKeys {
     keys: Key[];
