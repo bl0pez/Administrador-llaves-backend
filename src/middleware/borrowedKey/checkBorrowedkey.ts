@@ -16,7 +16,7 @@ export const checkBorrowedKey = async(req: ExtReqBorrowedKey, res: Response, nex
         //Validamos que venga el id de la llave prestada
         if (!req.params.id) {
             return res.status(400).json({
-                msg: 'No se ha proporcionado el id de la llave prestada'
+                msg: 'Seleccione una llave.'
             })
         }
 
@@ -24,7 +24,7 @@ export const checkBorrowedKey = async(req: ExtReqBorrowedKey, res: Response, nex
         //Validamos que el id de la llave prestada sea valido
         if (!isIdValid(req.params.id)) {
             return res.status(400).json({
-                msg: 'El id de la llave prestada no es valido'
+                msg: 'Llave no valida.'
             })
         }
 

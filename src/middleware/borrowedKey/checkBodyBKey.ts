@@ -7,7 +7,7 @@ export const checkBodyBKey = async (req: ExtReqBorrowedKey, res: Response, next:
     //Verificamos que el id de la llave sea valido
     if (!isIdValid(req.body.key)) {
         return res.status(400).json({
-            msg: 'El id de la llave prestada no es valido'
+            msg: 'Llave no valida.'
         })
     }
 
