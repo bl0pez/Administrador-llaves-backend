@@ -3,6 +3,7 @@ import { createBorrowedKey, getBorrowedKeys, getHistoryBorrowedKeys, updateBorro
 import { checkBorrowedKey, checkJwt } from '../middleware';
 import { checkBodyBKey } from '../middleware/borrowedKey/checkBodyBKey';
 import { hasRole } from '../middleware/validateRol';
+import { validarCampos } from '../middleware/validarCampos';
 
 const router = Router();
 
@@ -19,6 +20,7 @@ router.use(
 
 //Ruta para crear una llave prestada
 router.post('/create', [
+    validarCampos('service'),
     checkBodyBKey,
 ],createBorrowedKey);
 
