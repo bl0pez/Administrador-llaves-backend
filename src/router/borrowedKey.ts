@@ -20,7 +20,7 @@ router.use(
 
 //Ruta para crear una llave prestada
 router.post('/create', [
-    validarCampos('service'),
+    validarCampos('key','service', 'operator', 'requestedBy'),
     checkBodyBKey,
 ],createBorrowedKey);
 
