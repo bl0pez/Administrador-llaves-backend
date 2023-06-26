@@ -10,8 +10,9 @@ const keyHistoryCtrl = async (req: Request, res: Response) => {
             BorrowedKey.find({
                 $or: [
                     { status: false },
+                    //Ordenar por fecha de prestamo
                 ]
-            }).populate('key', 'name'),
+            }).populate('key', 'name').sort({ createdAt: -1 }),
             BorrowedKey.countDocuments({
                 $or: [
                     { status: false },
