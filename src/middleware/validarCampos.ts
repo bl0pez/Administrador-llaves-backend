@@ -27,7 +27,6 @@ export const validarCampos = (...campos: string[]) => {
             });
         }
 
-        //Expresion regular para permitir solo letras y numeros
         const regex2 = /^[a-zA-Z0-9\s]*$/;
 
         //Verificar que los campos no contengan caracteres especiales

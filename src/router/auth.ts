@@ -9,7 +9,7 @@ const router = Router();
 
 //Ruta de login de usuario
 router.post('/login', [
-    validarCampos('email', 'password'),
+    // validarCampos('email', 'password'),
 ],loginCtrl);
 
 //Ruta de registro de usuario
