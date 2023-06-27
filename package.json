@@ -30,6 +30,9 @@
     "@types/express-fileupload": "^1.4.1",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/mongoose": "^5.11.97",
-    "@types/uuid": "^9.0.2"
+    "@types/uuid": "^9.0.2",
+    "ts-node": "^10.9.1",
+    "tslib": "^2.6.0",
+    "typescript": "^5.1.3"
   }
 }
