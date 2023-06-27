@@ -49,3 +49,13 @@ Obtiene todas las llaves prestadas
 
 #### POST /api/borrowedKeys/create
 Crea una nueva llave prestada
+
+#### PUT /api/borrowedKeys/:id
+Actualiza el estado de una llave prestada
+
+#
+
+### Historial de llaves prestadas
+
+#### GET /api/keyHistory
+Obtiene el historial de llaves prestadas
