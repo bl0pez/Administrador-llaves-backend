@@ -14,6 +14,7 @@ router.use(hasRole('ADMIN_ROLE'));
 
 router.post('/', [
     validarCampos('name','description', 'image'),
+    validateFile
 ],createKeyCloudinary);
 
 router.put('/:id',[
