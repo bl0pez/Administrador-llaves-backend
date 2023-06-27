@@ -34,6 +34,11 @@ export const uploadFile = (file: IFile, validExtension: string[] = ['png', 'jpg'
             return reject(`La extensión ${extension} no es válida`);
         }
 
+        //Tamaño de la imagen no puede ser mayor de 50kb
+        if (image.size > 50000) {
+            return reject(`La imagen no puede ser mayor de 50kb`);
+        }
+
         //Generamos el nombre del archivo
         const nameTemp = uuidv4() + '.' + extension;
 

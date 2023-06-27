@@ -1,8 +1,19 @@
 import { Request, Response } from 'express';
-import { ExtReqKey, URequest } from '../interface';
+import { ExtReqKey, URequest, Image } from '../interface';
 import { deleteFile, uploadFile } from '../helper';
+
+import cloudinary from 'cloudinary';
+
+cloudinary.v2.config(process.env.CLOUDINARY_URL!);
+
+
 import Keys from '../models/keys';
 
+/**
+ * Crear una llave y subir la imagen localmente
+ * @param req 
+ * @param res 
+ */
 const createKey = async (req: URequest, res: Response) => {
     try {
 
@@ -134,12 +145,108 @@ const deleteItem = async (req: ExtReqKey, res: Response) => {
     }
 }
 
+/**
+ * Crea una llave en la base de datos y la imagen se sube a cloudinary
+ * @param req 
+ * @param res 
+ */
+const createKeyCloudinary = async (req: URequest, res: Response) => {
+    try {
 
+        const { name, description } = req.body;
+
+        const { tempFilePath } = req?.files?.image as Image;
+
+        const resp = await cloudinary.v2.uploader.upload(tempFilePath)
+    
+
+        const responseItem = await Keys.create({
+            name,
+            description,
+            user: req.user?._id,
+            image: resp.secure_url
+        }).then((item) => item.populate('user', 'name'));
+
+        res.status(200).json({
+            ok: true,
+            key: responseItem,
+            msg: `Llave creada con exito`,
+        })
+
+
+
+
+
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Error inesperado al crear la llave'
+        });
+    }
+
+}
+
+/**
+ * Actualiza una llave en la base de datos y la imagen se sube a cloudinary
+ * @param req 
+ * @param res 
+ * @returns 
+ */
+const updateItemCloudinary = async (req: ExtReqKey, res: Response) => {
+    try {
+        if (req.files) {
+
+            //Eliminamos la imagen anterior
+            if(req.key?.image){
+                const nameArr = req.key?.image.split('/');
+                const name = nameArr[nameArr.length - 1];
+                const [public_id] = name.split('.');
+                cloudinary.v2.uploader.destroy(public_id);
+            }
+
+            const { tempFilePath } = req?.files?.image as Image;
+
+            const resp = await cloudinary.v2.uploader.upload(tempFilePath)
+
+            req.body.image = resp.secure_url;
+
+            //Actualizamos la llave
+            const newItem = await Keys.findByIdAndUpdate(req.params.id, req.body, { new: true }).populate('user', 'name');           
+
+            return res.status(200).json({
+                ok: true,
+                msg: 'Llave actualizada',
+                key: newItem
+            });
+
+        }
+
+        const newItem = await Keys.findByIdAndUpdate(req.params.id, req.body, { new: true }).populate('user', 'name');
+
+        return res.status(200).json({
+            ok: true,
+            msg: 'Llave actualizada',
+            key: newItem
+        })
+
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Error inesperado'
+        });
+    }
+}
 
 
 export {
     createKey,
     getItems,
     deleteItem,
-    updateItem
+    updateItem,
+    createKeyCloudinary,
+    updateItemCloudinary
 }

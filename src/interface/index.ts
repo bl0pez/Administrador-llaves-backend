@@ -80,3 +80,15 @@ export interface JwtDecoded extends JwtPayload {
 export interface idUser {
     _id: string;
 }
+
+export interface Image {
+    tempFilePath: string;
+    name: string;
+    size: number;
+    mimetype: string;
+    mv: Function;
+    data: Buffer;
+    encoding: string;
+    truncated: boolean;
+    md5: string;
+}
