@@ -3,11 +3,11 @@ import { Image } from "../interface";
 
 /**
  * 
+ * @description - Valida que exista un archivo en la petición y que sea una imagen valida
  * @param req - Request
  * @param res - Response
  * @param next - NextFunction
  * @returns - Response | NextFunction
- * @description - Valida que exista un archivo en la petición
  */
 export const validateFile = (req: Request, res: Response, next: NextFunction) => {
 
