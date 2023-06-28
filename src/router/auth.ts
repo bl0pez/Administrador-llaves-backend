@@ -12,14 +12,7 @@ router.get('/validate', [
 ], validateCtrl);
 
 //Ruta de login de usuario
-router.post('/login', [
-    validarCampos(
-        [
-            validarLetrasNumeros,
-        ],
-        ['email', 'password']
-    ),
-], loginCtrl);
+router.post('/login', loginCtrl);
 
 
 
