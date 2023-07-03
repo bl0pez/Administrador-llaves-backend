@@ -6,7 +6,8 @@ const KeySchema = new Schema<Key>({
     description: { type: String, required: true },
     image: { type: String, required: true },
     user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    status: { type: Boolean, required: true, default: false }
+    status: { type: Boolean, required: true, default: false },
+    delete: { type: Boolean, required: true, default: false }
 }, {
     timestamps: true,
     versionKey: false

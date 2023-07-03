@@ -27,6 +27,7 @@ export interface Key {
     updatedAt:   string;
     image:      string;
     status:      boolean;
+    delete:      boolean;
 }
 
 //Modelo de rol
