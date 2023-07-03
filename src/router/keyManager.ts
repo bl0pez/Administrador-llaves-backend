@@ -22,7 +22,7 @@ router.delete('/:id', [
 router.use(validarCampos([
     validarLetrasNumeros
 ], [
-    'name', 'description', 'image'
+    'name', 'description'
 ]))
 
 //Ruta para crear una llave

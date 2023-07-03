@@ -23,14 +23,6 @@ export const validarCampos = (exp: ValidateFields[], campos: string[]) => {
             });
         }
 
-        //Verificar que los campos no esten vacios
-        if(!campos.every( campo => req.body[campo] !== '')){
-            return res.status(400).json({
-                ok: false,
-                msg: 'Todos los campos son obligatorios'
-            });
-        }
-
         //Verificamos todas las expresiones regulares
         for(const expReg of exp){
             if(!campos.every( campo => expReg.expresion.test(req.body[campo]))){
