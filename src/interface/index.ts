@@ -14,6 +14,7 @@ export interface User {
     role: string;
     status: boolean;
     updatedAt: string;
+    delete: boolean;
 }
 
 //Modelo de key

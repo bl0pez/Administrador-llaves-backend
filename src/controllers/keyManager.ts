@@ -95,7 +95,9 @@ const getItems = async (req: Request, res: Response) => {
     try {
 
         //Obtenemos las llaves de la base de datos por orden de la mas nueva a la mas vieja
-        const response = await Keys.find().sort({ _id: -1 }).populate('user', 'name');
+        const response = await Keys.find({
+            delete: false
+        }).sort({ _id: -1 }).populate('user', 'name');
         res.status(200).json({
             ok: true,
             msg: 'Llaves obtenidas con exito',
@@ -122,16 +124,24 @@ const deleteItem = async (req: ExtReqKey, res: Response) => {
     try {
 
         const { key } = req;
-        const response = await Keys.findByIdAndDelete(req.params.id);
+        
+        //Cambiamos el estado de la llave
+        const response = await Keys.findByIdAndUpdate(req.params.id, { delete: true }, { new: true }).populate('user', 'name');
 
-        if (response!.image) {
-            //deleteFile(response!.image);
-            //Cloudinary
-            const nameArr = response!.image.split('/');
-            const name = nameArr[nameArr.length - 1];
-            const [public_id] = name.split('.');
-            cloudinary.v2.uploader.destroy(public_id);
-        }
+        //Cambiamos el estado de la llave
+
+
+        //Por si queremos eliminar la imagen
+        //const response = await Keys.findByIdAndDelete(req.params.id);
+
+        // if (response!.image) {
+        //     //deleteFile(response!.image);
+        //     //Cloudinary
+        //     const nameArr = response!.image.split('/');
+        //     const name = nameArr[nameArr.length - 1];
+        //     const [public_id] = name.split('.');
+        //     cloudinary.v2.uploader.destroy(public_id);
+        // }
         
 
         res.status(200).json({
