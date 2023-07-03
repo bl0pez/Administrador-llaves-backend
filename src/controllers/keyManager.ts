@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { ExtReqKey, URequest, Image } from '../interface';
+import { ExtReqKey, URequest, Image, Key } from '../interface';
 import { deleteFile, uploadFile } from '../helper';
 
 import cloudinary from 'cloudinary';
@@ -125,7 +125,12 @@ const deleteItem = async (req: ExtReqKey, res: Response) => {
         const response = await Keys.findByIdAndDelete(req.params.id);
 
         if (response!.image) {
-            deleteFile(response!.image);
+            //deleteFile(response!.image);
+            //Cloudinary
+            const nameArr = response!.image.split('/');
+            const name = nameArr[nameArr.length - 1];
+            const [public_id] = name.split('.');
+            cloudinary.v2.uploader.destroy(public_id);
         }
         
 
