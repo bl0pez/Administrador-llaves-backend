@@ -6,6 +6,6 @@ type ValidateFields = {
 
 // Expresion regular para validar que solo se permitan letras y numeros
 export const validarLetrasNumeros:ValidateFields = {
-    expresion: /^[a-zA-Z0-9áéíóúÁÉÍÓÚ,\.;]*$/,
-    msg: 'Solo se permiten letras y numeros'
+    expresion: /^[a-zA-ZáéíóúÁÉÍÓÚ0-9,.\s]*[a-zA-ZáéíóúÁÉÍÓÚ0-9,.\s]$/,
+    msg: 'Carasteres permitidos: letras, numeros, espacios, comas y puntos'
 }

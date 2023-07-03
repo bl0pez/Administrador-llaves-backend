@@ -25,6 +25,11 @@ export const validarCampos = (exp: ValidateFields[], campos: string[]) => {
 
         //Verificamos todas las expresiones regulares
         for(const expReg of exp){
+
+            console.log(campos.every( campo => expReg.expresion.test(req.body[campo])));
+            
+            
+
             if(!campos.every( campo => expReg.expresion.test(req.body[campo]))){
                 return res.status(400).json({
                     ok: false,
