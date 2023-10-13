@@ -7,23 +7,12 @@ import { validarLetrasNumeros } from "../helper/validaciones";
 const router = Router();
 
 //Ruta de validar sesion de usuario
-router.get('/validate', [
-    checkJwt
-], validateCtrl);
+router.get("/validate", [checkJwt], validateCtrl);
 
 //Ruta de login de usuario
-router.post('/login', loginCtrl);
-
-
+router.post("/login", loginCtrl);
 
 //Ruta de registro de usuario
-router.post('/register', [
-    validarCampos(
-        [ validarLetrasNumeros ],
-        ['name', 'email', 'password']
-    )
-], registerCtrl);
-
-
+router.post("/register", [], registerCtrl);
 
 export default router;
