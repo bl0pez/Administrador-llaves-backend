@@ -1,61 +1,23 @@
-# Proyecto de administrador de llaves
+<p align="center">
+  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
+</p>
+
+[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
+[circleci-url]: https://circleci.com/gh/nestjs/nest
+
+# NestJS API
 
 ## Descripción
-Permite administrar las llaves y llevar un control de las mismas.
+Este repositorio sirve como un esqueleto inicial para proyectos basados en NestJS. Proporciona una estructura de directorios y archivos básica, así como configuraciones iniciales comunes para ayudarte a comenzar rápidamente con el desarrollo de tu aplicación NestJS.
 
 ## Instalación
-1. Clonar el repositorio
-2. Instalar las dependencias
-3. Renombrar el archivo .example.env a .env
 
+1. Clona este repositorio en tu máquina local.
+2. Ejecuta `npm install` para instalar las dependencias del proyecto.
+3. Clone el archivo `.env.example` y renómbrelo a `.env`.
+4. Llena las variables de entorno con los valores correspondientes.
+5. Levantar el contenedor de Docker con `docker-compose up -d`.
+6. Ejecuta `npm run start:dev` para levantar el servidor de desarrollo.
 
-## Endpoints
-
-### Llaves
-#### GET /api/keys
-Obtiene todas las llaves
-
-#### GET /api/keys/:id
-Obtiene una llave por su id
-
-#### POST /api/keys
-Crea una nueva llave
-
-#### PUT /api/keys/:id
-Actualiza una llave por su id
-
-#### DELETE /api/keys/:id
-Elimina una llave por su id
-
-#
-
-## Usuarios
-
-#### POST /api/register
-Crea un nuevo usuario
-
-#### POST /api/login
-Inicia sesión
-
-#### GET api/validate
-Refresca la sesión
-
-#
-
-### Llaves prestadas
-
-#### GET /api/borrowedKeys
-Obtiene todas las llaves prestadas
-
-#### POST /api/borrowedKeys/create
-Crea una nueva llave prestada
-
-#### PUT /api/borrowedKeys/:id
-Actualiza el estado de una llave prestada
-
-#
-
-### Historial de llaves prestadas
-
-#### GET /api/keyHistory
-Obtiene el historial de llaves prestadas
+## Documentación de la API
+- [Swagger](http://localhost:3000/api)
