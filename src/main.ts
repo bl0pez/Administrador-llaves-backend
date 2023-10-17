@@ -18,6 +18,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Admnistrador de llaves')
     .setDescription('Controla la administración de llaves')
+    .addBearerAuth()
     .setVersion('2.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);

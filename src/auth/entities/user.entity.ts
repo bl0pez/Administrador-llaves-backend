@@ -5,10 +5,11 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-
+import { Key } from 'src/key/entities/key.entity';
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
@@ -36,6 +37,9 @@ export class User {
     default: ['operador'],
   })
   roles: string[];
+
+  @OneToMany(() => Key, (key) => key.createBy)
+  keys: Key[];
 
   @CreateDateColumn()
   created_at: Date;
