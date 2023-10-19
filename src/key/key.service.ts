@@ -52,6 +52,9 @@ export class KeyService {
     try {
       const keys = await this.keyRepository.findAndCount({
         relations: ['createBy'],
+        order: {
+          createdAt: 'DESC',
+        },
       });
 
       return {
@@ -61,11 +64,35 @@ export class KeyService {
         })),
         count: keys[1],
       };
-
-      return keys;
     } catch (error) {
       this.handleDBExceptions(error);
     }
+  }
+
+  public async findAvailableKeys() {
+    return await this.keyRepository.find({
+      where: { isBorrowed: false },
+    });
+  }
+
+  public async validateKeyAvailability(keyId: string) {
+    const key = await this.keyRepository.findOne({
+      where: { keyId },
+    });
+
+    if (!key) throw new BadRequestException('Llave no encontrada');
+
+    if (key.isBorrowed)
+      throw new BadRequestException('La llave no está disponible');
+
+    return {
+      keyId: key.keyId,
+      keyName: key.keyName,
+    };
+  }
+
+  public async updateKeyIsBorrowed(keyId: string, isBorrowed: boolean) {
+    return await this.keyRepository.update({ keyId }, { isBorrowed });
   }
 
   private handleDBExceptions(error: any) {

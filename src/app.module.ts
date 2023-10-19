@@ -4,16 +4,18 @@ import { PostgreDatabaseModule } from './database/postgre/postgre-database.modul
 import { AuthModule } from './auth/auth.module';
 import { KeyModule } from './key/key.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { LoanRecordModule } from './loanRecord/loanRecord.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    PostgreDatabaseModule,
     AuthModule,
-    KeyModule,
     CloudinaryModule,
+    KeyModule,
+    LoanRecordModule,
+    PostgreDatabaseModule,
   ],
   controllers: [],
   providers: [],

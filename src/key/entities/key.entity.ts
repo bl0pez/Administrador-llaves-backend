@@ -4,10 +4,12 @@ import {
   DeleteDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from 'src/auth/entities/user.entity';
+import { LoanRecord } from 'src/loanRecord/entities/loadRecord.entity';
 
 @Entity('keys')
 export class Key {
@@ -27,7 +29,7 @@ export class Key {
   @Column('boolean', {
     default: false,
   })
-  isLoaned: boolean;
+  isBorrowed: boolean;
 
   @Column('text')
   deliveredBy: string;
@@ -39,6 +41,9 @@ export class Key {
     nullable: false,
   })
   createBy: User;
+
+  @OneToMany(() => LoanRecord, (loanRecord) => loanRecord.key)
+  loanRecords: LoanRecord[];
 
   @CreateDateColumn()
   createdAt: Date;

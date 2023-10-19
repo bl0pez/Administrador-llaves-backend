@@ -48,4 +48,9 @@ export class KeyController {
   public async getAllKeys() {
     return this.keyService.getAllKeys();
   }
+
+  @Get('available')
+  public async getAvailableKeys() {
+    return this.keyService.findAvailableKeys();
+  }
 }

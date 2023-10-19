@@ -10,6 +10,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Key } from 'src/key/entities/key.entity';
+import { LoanRecord } from 'src/loanRecord/entities/loadRecord.entity';
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
@@ -40,6 +41,9 @@ export class User {
 
   @OneToMany(() => Key, (key) => key.createBy)
   keys: Key[];
+
+  @OneToMany(() => LoanRecord, (loanRecord) => loanRecord.user)
+  loanRecords: LoanRecord[];
 
   @CreateDateColumn()
   created_at: Date;
