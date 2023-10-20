@@ -35,10 +35,25 @@ export class LoanRecordService {
       await this.loanRecordRepository.save(loanRecord);
       await this.keyService.updateKeyIsBorrowed(keyId, true);
 
-      return loanRecord;
+      return {
+        operador: user.fullName,
+        key: key.keyName,
+        borrowerName,
+        borrowerServiceOrCompany,
+        createdAt: loanRecord.createdAt,
+        updatedAt: null,
+      };
     } catch (error) {
       this.handleDBErrors(error);
     }
+  }
+
+  public async findAll() {
+    const loanRecords = await this.loanRecordRepository.find({
+      relations: ['key', 'user'],
+    });
+
+    return loanRecords;
   }
 
   private handleDBErrors(error: any): never {

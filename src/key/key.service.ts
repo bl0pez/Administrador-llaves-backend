@@ -72,6 +72,7 @@ export class KeyService {
   public async findAvailableKeys() {
     return await this.keyRepository.find({
       where: { isBorrowed: false },
+      select: ['keyId', 'keyName'],
     });
   }
 

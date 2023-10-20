@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Auth, GetUser } from 'src/auth/decorators';
 import { LoanRecordService } from './loanRecord.service';
@@ -18,5 +18,10 @@ export class LoandRecordController {
     @Body() createLoanRecordDto: CreateLoanRecordDto,
   ) {
     return this.loanRecordService.create(user, createLoanRecordDto);
+  }
+
+  @Get()
+  public async findAll() {
+    return this.loanRecordService.findAll();
   }
 }
