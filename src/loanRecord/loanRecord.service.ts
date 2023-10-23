@@ -9,6 +9,8 @@ import { Repository } from 'typeorm';
 import { CreateLoanRecordDto } from './dto/create-loadRecord.dto';
 import { User } from '../auth/entities/user.entity';
 import { KeyService } from 'src/key/key.service';
+import { ResponseLoadRecordMapper } from './mapper';
+import { ResponseLoadRecordDto } from './dto/response-loadRecord.dto';
 
 @Injectable()
 export class LoanRecordService {
@@ -48,12 +50,14 @@ export class LoanRecordService {
     }
   }
 
-  public async findAll() {
+  public async findAll(): Promise<ResponseLoadRecordDto[]> {
     const loanRecords = await this.loanRecordRepository.find({
       relations: ['key', 'user'],
     });
 
-    return loanRecords;
+    return loanRecords.map((loadRecord) =>
+      ResponseLoadRecordMapper.toResponseLoadRecordDto(loadRecord),
+    );
   }
 
   private handleDBErrors(error: any): never {

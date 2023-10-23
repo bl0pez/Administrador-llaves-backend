@@ -6,6 +6,7 @@ import {
   MaxFileSizeValidator,
   ParseFilePipe,
   Post,
+  Query,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -15,6 +16,7 @@ import { CreateKeyDto } from './dto';
 import { Auth, GetUser } from 'src/auth/decorators';
 import { User } from 'src/auth/entities/user.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 // import { diskStorage } from 'multer';
 // import { fileName } from './helper/fileName.helper';
 
@@ -45,8 +47,8 @@ export class KeyController {
   }
 
   @Get()
-  public async getAllKeys() {
-    return this.keyService.getAllKeys();
+  public async findAll(@Query() paginationDto: PaginationDto) {
+    return this.keyService.findAll(paginationDto);
   }
 
   @Get('available')

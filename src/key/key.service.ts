@@ -10,6 +10,7 @@ import { Repository } from 'typeorm';
 import { CreateKeyDto } from './dto/create-key.dto';
 import { User } from 'src/auth/entities/user.entity';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @Injectable()
 export class KeyService {
@@ -48,14 +49,24 @@ export class KeyService {
     }
   }
 
-  public async getAllKeys() {
+  public async findAll(paginationDto: PaginationDto) {
+    const { limit = 10, offset = 0, search } = paginationDto;
+
     try {
-      const keys = await this.keyRepository.findAndCount({
-        relations: ['createBy'],
-        order: {
-          createdAt: 'DESC',
-        },
-      });
+      const queryBuilder = this.keyRepository.createQueryBuilder();
+
+      const keys = await queryBuilder
+        .leftJoinAndSelect('Key.createBy', 'createBy')
+        .where('LOWER(Key.keyName) LIKE :search', {
+          search: search ? `%${search}%` : '%%',
+        })
+        .orWhere('LOWER(createBy.fullName) LIKE :search', {
+          search: search ? `%${search}%` : '%%',
+        })
+        .take(limit)
+        .skip(offset)
+        .orderBy('Key.createdAt', 'DESC')
+        .getManyAndCount();
 
       return {
         keys: keys[0].map((key) => ({
