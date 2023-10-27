@@ -9,7 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from 'src/auth/entities/user.entity';
-import { LoanRecord } from 'src/loanRecord/entities/loadRecord.entity';
+import { BorrowedKey } from 'src/borrowedKey/entities/borroweKey.entity';
 
 @Entity('keys')
 export class Key {
@@ -40,10 +40,10 @@ export class Key {
   @ManyToOne(() => User, (user) => user.keys, {
     nullable: false,
   })
-  createBy: User;
+  user: User;
 
-  @OneToMany(() => LoanRecord, (loanRecord) => loanRecord.key)
-  loanRecords: LoanRecord[];
+  @OneToMany(() => BorrowedKey, (borrowedKeys) => borrowedKeys.key)
+  borrowedKeys: BorrowedKey[];
 
   @CreateDateColumn()
   createdAt: Date;

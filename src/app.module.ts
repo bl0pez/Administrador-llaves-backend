@@ -4,7 +4,7 @@ import { PostgreDatabaseModule } from './database/postgre/postgre-database.modul
 import { AuthModule } from './auth/auth.module';
 import { KeyModule } from './key/key.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
-import { LoanRecordModule } from './loanRecord/loanRecord.module';
+import { BorrowedKeyModule } from './borrowedKey/borrowedKey.module';
 
 @Module({
   imports: [
@@ -14,7 +14,7 @@ import { LoanRecordModule } from './loanRecord/loanRecord.module';
     AuthModule,
     CloudinaryModule,
     KeyModule,
-    LoanRecordModule,
+    BorrowedKeyModule,
     PostgreDatabaseModule,
   ],
   controllers: [],

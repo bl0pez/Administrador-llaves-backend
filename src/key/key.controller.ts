@@ -3,6 +3,7 @@ import {
   Controller,
   FileTypeValidator,
   Get,
+  HttpStatus,
   MaxFileSizeValidator,
   ParseFilePipe,
   Post,
@@ -10,25 +11,44 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { KeyService } from './key.service';
-import { ApiBearerAuth, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CreateKeyDto } from './dto';
 import { Auth, GetUser } from 'src/auth/decorators';
 import { User } from 'src/auth/entities/user.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
-// import { diskStorage } from 'multer';
-// import { fileName } from './helper/fileName.helper';
+import {
+  FindAllKeysService,
+  CreateKeyService,
+  KeyAvailabilityService,
+} from './services';
+import { ResponseKeyDto } from './dto/response-key.dto';
+import { KeyFilterService } from './services/keyFilter.service';
+import { PaginationAndSearchDto } from 'src/common/dto/PaginationAndSearch.dto';
 
 @ApiTags('Llaves')
 @ApiBearerAuth()
 @Controller('api/v2/keys')
 @Auth()
 export class KeyController {
-  public constructor(private readonly keyService: KeyService) {}
+  public constructor(
+    private readonly createKeyService: CreateKeyService,
+    private readonly findAllKeysService: FindAllKeysService,
+    private readonly keyFilterService: KeyFilterService,
+    private readonly keyAvailabilityService: KeyAvailabilityService,
+  ) {}
 
   @Post('create')
   @ApiConsumes('multipart/form-data')
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    type: ResponseKeyDto,
+  })
   @UseInterceptors(FileInterceptor('file'))
   public async create(
     @Body() createKeyDto: CreateKeyDto,
@@ -43,16 +63,23 @@ export class KeyController {
     )
     file: Express.Multer.File,
   ) {
-    return this.keyService.create(user, createKeyDto, file);
+    return this.createKeyService.run(user, createKeyDto, file);
   }
 
   @Get()
   public async findAll(@Query() paginationDto: PaginationDto) {
-    return this.keyService.findAll(paginationDto);
+    return this.findAllKeysService.run(paginationDto);
+  }
+
+  @Get('filter')
+  public async findKeyByNameAndUserName(
+    @Query() paginationAndSearchDto: PaginationAndSearchDto,
+  ) {
+    return this.keyFilterService.run(paginationAndSearchDto);
   }
 
   @Get('available')
   public async getAvailableKeys() {
-    return this.keyService.findAvailableKeys();
+    return this.keyAvailabilityService.run();
   }
 }

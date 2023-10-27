@@ -1,5 +1,3 @@
-import { User } from 'src/auth/entities/user.entity';
-import { Key } from 'src/key/entities/key.entity';
 import {
   Column,
   CreateDateColumn,
@@ -9,11 +7,13 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { User } from 'src/auth/entities/user.entity';
+import { Key } from 'src/key/entities/key.entity';
 
-@Entity('loanRecords')
-export class LoanRecord {
+@Entity('BorrowedKeys')
+export class BorrowedKey {
   @PrimaryGeneratedColumn('uuid')
-  loanRecordId: string;
+  borrowedKeyId: string;
 
   @Column('text', {
     nullable: false,
@@ -25,10 +25,13 @@ export class LoanRecord {
   })
   borrowerServiceOrCompany: string;
 
-  @ManyToOne(() => User, (user) => user.loanRecords)
+  @Column('boolean', { default: true })
+  isOpened: boolean;
+
+  @ManyToOne(() => User, (user) => user.borrowedKeys)
   user: User;
 
-  @ManyToOne(() => Key, (key) => key.loanRecords)
+  @ManyToOne(() => Key, (key) => key.borrowedKeys)
   key: Key;
 
   @CreateDateColumn()

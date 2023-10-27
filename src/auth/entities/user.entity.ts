@@ -10,7 +10,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Key } from 'src/key/entities/key.entity';
-import { LoanRecord } from 'src/loanRecord/entities/loadRecord.entity';
+import { BorrowedKey } from 'src/borrowedKey/entities/borroweKey.entity';
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
@@ -39,11 +39,11 @@ export class User {
   })
   roles: string[];
 
-  @OneToMany(() => Key, (key) => key.createBy)
+  @OneToMany(() => Key, (key) => key.user)
   keys: Key[];
 
-  @OneToMany(() => LoanRecord, (loanRecord) => loanRecord.user)
-  loanRecords: LoanRecord[];
+  @OneToMany(() => BorrowedKey, (borrowedKey) => borrowedKey.user)
+  borrowedKeys: BorrowedKey[];
 
   @CreateDateColumn()
   created_at: Date;
