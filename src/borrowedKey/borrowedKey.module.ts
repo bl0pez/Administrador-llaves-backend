@@ -5,6 +5,8 @@ import { BorrowedKey } from './entities/borroweKey.entity';
 import { KeyModule } from 'src/key/key.module';
 import { BorrowedKeyController } from './borrowedKey.controller';
 import {
+  BorrowedKeyFilterService,
+  BorrowedKeyHistoryService,
   CloseBorrowedKeyService,
   CreateBorrowedKeyService,
   FindAllBorrowedKeyService,
@@ -14,6 +16,8 @@ import {
 @Module({
   imports: [TypeOrmModule.forFeature([BorrowedKey]), KeyModule],
   providers: [
+    BorrowedKeyFilterService,
+    BorrowedKeyHistoryService,
     CloseBorrowedKeyService,
     CreateBorrowedKeyService,
     FindAllBorrowedKeyService,

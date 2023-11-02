@@ -9,16 +9,19 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+
 import { Auth, GetUser } from 'src/auth/decorators';
+import { User } from 'src/auth/entities/user.entity';
 import {
+  BorrowedKeyFilterService,
   CloseBorrowedKeyService,
   CreateBorrowedKeyService,
   FindAllBorrowedKeyService,
 } from './services';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { CreateBorrowedKeyDto } from './dto/create-borrowedKey.dto';
-import { User } from 'src/auth/entities/user.entity';
-import { ResponseBorrowedKeyDto } from './dto/response-borrowedKey.dto';
+import { PaginationAndSearchDto } from 'src/common/dto/PaginationAndSearch.dto';
+import { CreateBorrowedKeyDto, ResponseBorrowedKeyDto } from './dto';
+import { BorrowedKeyHistoryService } from './services/borrowedKeyHistory.service';
 
 @ApiTags('Llaves prestadas')
 @ApiBearerAuth()
@@ -29,6 +32,8 @@ export class BorrowedKeyController {
     private readonly findAllBorrowedKeyService: FindAllBorrowedKeyService,
     private readonly createBorrowedKeyService: CreateBorrowedKeyService,
     private readonly closeBorrowedKeyService: CloseBorrowedKeyService,
+    private readonly borrowedKeyFilterService: BorrowedKeyFilterService,
+    private readonly borrowedKeyHistoryService: BorrowedKeyHistoryService,
   ) {}
 
   @ApiResponse({
@@ -47,6 +52,20 @@ export class BorrowedKeyController {
   @Get()
   public async findAll(@Query() paginationDto: PaginationDto) {
     return this.findAllBorrowedKeyService.run(paginationDto);
+  }
+
+  @Get('/history')
+  public async getRecord(
+    @Query() paginationAndSearchDto: PaginationAndSearchDto,
+  ) {
+    return this.borrowedKeyHistoryService.run(paginationAndSearchDto);
+  }
+
+  @Get('filter')
+  public async findBorrowedKeyByNameAndUserName(
+    @Query() paginationAndSearchDto: PaginationAndSearchDto,
+  ) {
+    return this.borrowedKeyFilterService.run(paginationAndSearchDto);
   }
 
   @Patch('/close/:borrowedKeyId')
