@@ -1,11 +1,8 @@
 import {
   Body,
   Controller,
-  FileTypeValidator,
   Get,
   HttpStatus,
-  MaxFileSizeValidator,
-  ParseFilePipe,
   Post,
   Query,
   UploadedFile,
@@ -30,6 +27,8 @@ import {
 import { ResponseKeyDto } from './dto/response-key.dto';
 import { KeyFilterService } from './services/keyFilter.service';
 import { PaginationAndSearchDto } from 'src/common/dto/PaginationAndSearch.dto';
+import { diskStorage } from 'multer';
+import { fileNamer, fileFilter } from './helper';
 
 @ApiTags('Llaves')
 @ApiBearerAuth()
@@ -49,19 +48,20 @@ export class KeyController {
     status: HttpStatus.CREATED,
     type: ResponseKeyDto,
   })
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(
+    FileInterceptor('file', {
+      fileFilter: fileFilter,
+      limits: { fileSize: 1024 * 1024 * 5 }, // 5MB
+      storage: diskStorage({
+        destination: './public/uploads',
+        filename: fileNamer,
+      }),
+    }),
+  )
   public async create(
     @Body() createKeyDto: CreateKeyDto,
     @GetUser() user: User,
-    @UploadedFile(
-      new ParseFilePipe({
-        validators: [
-          new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 4 }),
-          new FileTypeValidator({ fileType: '.(jpg|jpeg|png|webp)' }),
-        ],
-      }),
-    )
-    file: Express.Multer.File,
+    @UploadedFile() file: Express.Multer.File,
   ) {
     return this.createKeyService.run(user, createKeyDto, file);
   }

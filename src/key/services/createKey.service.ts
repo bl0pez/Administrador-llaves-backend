@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -22,12 +22,11 @@ export class CreateKeyService {
     createKeyDto: CreateKeyDto,
     file: Express.Multer.File,
   ): Promise<ResponseKeyDto> {
-    const { secure_url } = await this.cloudinaryService.uploadFile(file);
-
+    if (!file) throw new BadRequestException('No se ha encontrado el archivo');
     const data = this.keyRepository.create({
       ...createKeyDto,
       user,
-      image: secure_url,
+      image: file.filename,
     });
 
     const key = await this.keyRepository.save(data);

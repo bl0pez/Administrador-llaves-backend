@@ -3,6 +3,7 @@
 /node_modules
 .env
 /postgres
+/public/uploads/*
 
 static/uploads/*
 
