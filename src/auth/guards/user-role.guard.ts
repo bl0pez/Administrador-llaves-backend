@@ -7,6 +7,8 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
+
+import { User } from '../entities/user.entity';
 import { META_ROLES } from 'src/auth/decorators';
 
 @Injectable()
@@ -21,20 +23,22 @@ export class UserRoleGuard implements CanActivate {
       context.getHandler(),
     );
 
+    console.log(validRoles);
+
     if (!validRoles) return true;
     if (validRoles.length === 0) return true;
 
     const req = context.switchToHttp().getRequest();
-    const user = req.user;
+    const user = req.user as User;
 
     if (!user) throw new BadRequestException('User not found');
 
-    for (const role of validRoles) {
+    for (const role of user.roles) {
       if (validRoles.includes(role)) return true;
     }
 
     throw new ForbiddenException(
-      `Usuario ${user.username} no autorizado para realizar esta acción`,
+      `Usuario ${user.fullName} no autorizado para realizar esta acción`,
     );
   }
 }

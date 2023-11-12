@@ -7,6 +7,7 @@ import { KeyModule } from './key/key.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { BorrowedKeyModule } from './borrowedKey/borrowedKey.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     KeyModule,
     BorrowedKeyModule,
     PostgreDatabaseModule,
+    UserModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
     }),

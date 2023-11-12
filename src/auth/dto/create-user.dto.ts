@@ -13,6 +13,8 @@ export class CreateUserDto {
     example: 'John Doe',
   })
   @IsString()
+  @MinLength(3)
+  @MaxLength(40)
   fullName: string;
 
   @ApiProperty({
