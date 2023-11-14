@@ -11,7 +11,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 
 import { User } from './entities/user.entity';
-import { CreateUserDto, LoginUserDto, ResponseUserDto } from './dto';
+import { AuthDto, CreateUserDto, LoginUserDto } from './dto';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 
 @Injectable()
@@ -22,7 +22,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  public async create(createUserDto: CreateUserDto): Promise<ResponseUserDto> {
+  public async create(createUserDto: CreateUserDto): Promise<AuthDto> {
     try {
       const { password, ...userData } = createUserDto;
 
@@ -44,7 +44,7 @@ export class AuthService {
     }
   }
 
-  public async login(loginUserDto: LoginUserDto): Promise<ResponseUserDto> {
+  public async login(loginUserDto: LoginUserDto): Promise<AuthDto> {
     const { email, password } = loginUserDto;
 
     const user = await this.userRepository.findOne({
@@ -70,7 +70,7 @@ export class AuthService {
     };
   }
 
-  public async checkAuthStatus(user: User): Promise<ResponseUserDto> {
+  public async checkAuthStatus(user: User): Promise<AuthDto> {
     return {
       user: user,
       token: this.getJwtToken({ id: user.id }),

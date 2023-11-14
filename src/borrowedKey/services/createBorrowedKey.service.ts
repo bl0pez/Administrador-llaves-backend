@@ -2,10 +2,10 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BorrowedKey } from '../entities/borroweKey.entity';
 import { Repository } from 'typeorm';
-import { UserDto } from 'src/auth/dto';
 import { CreateBorrowedKeyDto } from '../dto/create-borrowedKey.dto';
 import { FindKeyByIdService, ToggleKeyStateService } from 'src/key/services';
 import { BorrwoedKeyResponseMapper } from '../mapper/responseBorrowedKeyMapper';
+import { UserDto } from 'src/user/dto';
 
 @Injectable()
 export class CreateBorrowedKeyService {

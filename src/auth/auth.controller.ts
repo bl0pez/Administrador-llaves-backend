@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { CreateUserDto, LoginUserDto, ResponseUserDto } from './dto';
+import { CreateUserDto, LoginUserDto, AuthDto } from './dto';
 import { Auth, GetUser } from './decorators';
 import { User } from './entities/user.entity';
 
@@ -21,9 +21,9 @@ export class AuthController {
   @ApiResponse({
     status: 201,
     description: 'El usuario ha sido creado exitosamente.',
-    type: ResponseUserDto,
+    type: AuthDto,
   })
-  create(@Body() createUserDto: CreateUserDto): Promise<ResponseUserDto> {
+  create(@Body() createUserDto: CreateUserDto): Promise<AuthDto> {
     return this.authService.create(createUserDto);
   }
 
@@ -31,12 +31,10 @@ export class AuthController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'El usuario ha sido autenticado exitosamente.',
-    type: ResponseUserDto,
+    type: AuthDto,
   })
   @HttpCode(HttpStatus.OK)
-  public loginUser(
-    @Body() loginUserDto: LoginUserDto,
-  ): Promise<ResponseUserDto> {
+  public loginUser(@Body() loginUserDto: LoginUserDto): Promise<AuthDto> {
     return this.authService.login(loginUserDto);
   }
 
@@ -44,10 +42,10 @@ export class AuthController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'El usuario ha sido autenticado exitosamente.',
-    type: ResponseUserDto,
+    type: AuthDto,
   })
   @Auth()
-  checkAuthStatus(@GetUser() user: User): Promise<ResponseUserDto> {
+  checkAuthStatus(@GetUser() user: User): Promise<AuthDto> {
     return this.authService.checkAuthStatus(user);
   }
 }
