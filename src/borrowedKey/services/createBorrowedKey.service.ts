@@ -17,6 +17,8 @@ export class CreateBorrowedKeyService {
   ) {}
 
   public async run(user: UserDto, createBorrowedKeyDto: CreateBorrowedKeyDto) {
+    console.log('aqui');
+
     const key = await this.findKeyByIdService.run(createBorrowedKeyDto.keyId);
 
     if (!key) throw new BadRequestException('Key not found');

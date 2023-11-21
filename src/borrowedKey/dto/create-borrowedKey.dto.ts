@@ -7,7 +7,7 @@ export class CreateBorrowedKeyDto {
     type: String,
     required: true,
   })
-  @IsUUID()
+  @IsUUID(4, { message: 'Llave inválida' })
   keyId: string;
 
   @ApiProperty({

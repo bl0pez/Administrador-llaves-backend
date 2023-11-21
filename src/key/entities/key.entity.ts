@@ -18,6 +18,7 @@ export class Key {
 
   @Column('text', {
     nullable: false,
+    unique: true,
   })
   keyName: string;
 

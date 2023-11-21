@@ -42,6 +42,9 @@ export class UserService {
       .where('LOWER(user.fullName) LIKE :fullName', {
         fullName: `%${searchToLowerCase}%`,
       })
+      .orWhere('LOWER(user.email) LIKE :email', {
+        email: `%${searchToLowerCase}%`,
+      })
       .take(limit)
       .skip(offset)
       .orderBy('created_at', 'DESC')
