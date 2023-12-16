@@ -12,29 +12,18 @@ import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { Auth, GetUser } from 'src/auth/decorators';
 import { User } from 'src/auth/entities/user.entity';
-import {
-  BorrowedKeyFilterService,
-  CloseBorrowedKeyService,
-  CreateBorrowedKeyService,
-  FindAllBorrowedKeyService,
-} from './services';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { PaginationAndSearchDto } from 'src/common/dto/PaginationAndSearch.dto';
 import { CreateBorrowedKeyDto, ResponseBorrowedKeyDto } from './dto';
-import { BorrowedKeyHistoryService } from './services/borrowedKeyHistory.service';
+
+import { BorrowedKeyService } from './borrowedKey.service';
 
 @ApiTags('Llaves prestadas')
 @ApiBearerAuth()
 @Controller('api/v2/borrowed-keys')
 @Auth()
 export class BorrowedKeyController {
-  public constructor(
-    private readonly findAllBorrowedKeyService: FindAllBorrowedKeyService,
-    private readonly createBorrowedKeyService: CreateBorrowedKeyService,
-    private readonly closeBorrowedKeyService: CloseBorrowedKeyService,
-    private readonly borrowedKeyFilterService: BorrowedKeyFilterService,
-    private readonly borrowedKeyHistoryService: BorrowedKeyHistoryService,
-  ) {}
+  public constructor(private readonly borrowedKeyService: BorrowedKeyService) {}
 
   @ApiResponse({
     status: HttpStatus.CREATED,
@@ -46,30 +35,30 @@ export class BorrowedKeyController {
     @GetUser() user: User,
     @Body() createBorrowedKeyDto: CreateBorrowedKeyDto,
   ) {
-    return this.createBorrowedKeyService.run(user, createBorrowedKeyDto);
+    return this.borrowedKeyService.create(user, createBorrowedKeyDto);
   }
 
   @Get()
   public async findAll(@Query() paginationDto: PaginationDto) {
-    return this.findAllBorrowedKeyService.run(paginationDto);
+    return this.borrowedKeyService.findAll(paginationDto);
   }
 
   @Get('/history')
   public async getRecord(
     @Query() paginationAndSearchDto: PaginationAndSearchDto,
   ) {
-    return this.borrowedKeyHistoryService.run(paginationAndSearchDto);
+    return this.borrowedKeyService.history(paginationAndSearchDto);
   }
 
   @Get('filter')
   public async findBorrowedKeyByNameAndUserName(
     @Query() paginationAndSearchDto: PaginationAndSearchDto,
   ) {
-    return this.borrowedKeyFilterService.run(paginationAndSearchDto);
+    return this.borrowedKeyService.filter(paginationAndSearchDto);
   }
 
   @Patch('/close/:borrowedKeyId')
   public async close(@Param('borrowedKeyId') borrowedKeyId: string) {
-    return this.closeBorrowedKeyService.run(borrowedKeyId);
+    return this.borrowedKeyService.close(borrowedKeyId);
   }
 }

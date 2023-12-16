@@ -1,8 +1,9 @@
 import { BorrowedKey } from '../entities/borroweKey.entity';
-import { ResponseBorrwoedKeys } from '../dto/response-borrowedkeys.dto';
-import { ResponseBorrowedKeyDto } from '../dto/response-borrowedKey.dto';
 
-export abstract class BorrwoedKeyResponseMapper {
+import { ResponseBorrowedKeyDto } from '../dto/response-borrowedKey.dto';
+import { ResponseBorrwoedKeys } from '../dto';
+
+export abstract class BorrowedKeyResponseMapper {
   public static toResponseBorrowedKeyDto(borrowedKey: BorrowedKey) {
     return ResponseBorrowedKeyDto.builder()
       .borrowedKeyId(borrowedKey.borrowedKeyId)

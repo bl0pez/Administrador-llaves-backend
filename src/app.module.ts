@@ -4,7 +4,6 @@ import { ConfigModule } from '@nestjs/config';
 import { PostgreDatabaseModule } from './database/postgre/postgre-database.module';
 import { AuthModule } from './auth/auth.module';
 import { KeyModule } from './key/key.module';
-import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { BorrowedKeyModule } from './borrowedKey/borrowedKey.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { UserModule } from './user/user.module';
@@ -15,7 +14,6 @@ import { UserModule } from './user/user.module';
       isGlobal: true,
     }),
     AuthModule,
-    CloudinaryModule,
     KeyModule,
     BorrowedKeyModule,
     PostgreDatabaseModule,

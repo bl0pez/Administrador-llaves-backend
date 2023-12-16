@@ -19,28 +19,18 @@ import { Auth, GetUser } from 'src/auth/decorators';
 import { User } from 'src/auth/entities/user.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
-import {
-  FindAllKeysService,
-  CreateKeyService,
-  KeyAvailabilityService,
-} from './services';
 import { ResponseKeyDto } from './dto/response-key.dto';
-import { KeyFilterService } from './services/keyFilter.service';
 import { PaginationAndSearchDto } from 'src/common/dto/PaginationAndSearch.dto';
 import { diskStorage } from 'multer';
 import { fileNamer, fileFilter } from './helper';
+import { KeyService } from './key.service';
 
 @ApiTags('Llaves')
 @ApiBearerAuth()
 @Controller('api/v2/keys')
 @Auth()
 export class KeyController {
-  public constructor(
-    private readonly createKeyService: CreateKeyService,
-    private readonly findAllKeysService: FindAllKeysService,
-    private readonly keyFilterService: KeyFilterService,
-    private readonly keyAvailabilityService: KeyAvailabilityService,
-  ) {}
+  public constructor(private readonly keyService: KeyService) {}
 
   @Post('create')
   @ApiConsumes('multipart/form-data')
@@ -63,23 +53,23 @@ export class KeyController {
     @GetUser() user: User,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.createKeyService.run(user, createKeyDto, file);
+    return this.keyService.create(user, createKeyDto, file);
   }
 
   @Get()
   public async findAll(@Query() paginationDto: PaginationDto) {
-    return this.findAllKeysService.run(paginationDto);
+    return this.keyService.findAll(paginationDto);
   }
 
   @Get('filter')
   public async findKeyByNameAndUserName(
     @Query() paginationAndSearchDto: PaginationAndSearchDto,
   ) {
-    return this.keyFilterService.run(paginationAndSearchDto);
+    return this.keyService.filter(paginationAndSearchDto);
   }
 
   @Get('available')
   public async getAvailableKeys() {
-    return this.keyAvailabilityService.run();
+    return this.keyService.checkAvailability();
   }
 }

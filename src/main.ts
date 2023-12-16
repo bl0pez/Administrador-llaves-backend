@@ -16,7 +16,7 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('Admnistrador de llaves')
+    .setTitle('Administrador de llaves')
     .setDescription('Controla la administración de llaves')
     .addBearerAuth()
     .setVersion('2.0')
@@ -24,6 +24,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(process.env.PORT);
+  await app.listen(process.env.PORT, '0.0.0.0');
 }
 bootstrap();
