@@ -14,6 +14,7 @@ export abstract class BorrowedKeyResponseMapper {
       .keyName(borrowedKey.key.keyName)
       .createdAt(borrowedKey.createdAt)
       .updatedAt(borrowedKey.updatedAt)
+      .receiverName(borrowedKey.receiverName)
       .build();
   }
 

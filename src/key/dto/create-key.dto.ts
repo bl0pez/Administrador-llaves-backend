@@ -17,11 +17,11 @@ export class CreateKeyDto {
     description: 'Descripción de la llave',
     type: String,
     minLength: 3,
-    maxLength: 50,
+    maxLength: 100,
   })
   @IsString()
   @MinLength(3)
-  @MaxLength(50)
+  @MaxLength(100)
   keyDescription: string;
 
   @ApiProperty({

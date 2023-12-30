@@ -44,4 +44,10 @@ export class BorrowedKey {
     nullable: true,
   })
   deletedAt: Date;
+
+  @Column('text', {
+    nullable: true,
+    default: null,
+  })
+  receiverName: string;
 }

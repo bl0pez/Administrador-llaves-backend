@@ -58,7 +58,10 @@ export class BorrowedKeyController {
   }
 
   @Patch('/close/:borrowedKeyId')
-  public async close(@Param('borrowedKeyId') borrowedKeyId: string) {
-    return this.borrowedKeyService.close(borrowedKeyId);
+  public async close(
+    @Param('borrowedKeyId') borrowedKeyId: string,
+    @GetUser() user: User,
+  ) {
+    return this.borrowedKeyService.close(borrowedKeyId, user);
   }
 }

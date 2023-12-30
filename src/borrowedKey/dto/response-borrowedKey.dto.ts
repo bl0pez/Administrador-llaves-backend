@@ -9,6 +9,7 @@ export class ResponseBorrowedKeyDto {
   keyName: string;
   createdAt: Date;
   updatedAt: Date;
+  receiverName: string | null;
 
   public static builder() {
     return Builder<ResponseBorrowedKeyDto>();

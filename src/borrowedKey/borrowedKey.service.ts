@@ -144,7 +144,7 @@ export class BorrowedKeyService {
     return BorrowedKeyResponseMapper.toResponseBorrowedKeysDto(borrowedKeys);
   }
 
-  public async close(borrowedKeyId: string) {
+  public async close(borrowedKeyId: string, userDto: UserDto) {
     try {
       const borrowedKey = await this.findById(borrowedKeyId);
 
@@ -154,6 +154,7 @@ export class BorrowedKeyService {
       const preload = await this.borrowedKeyRepository.preload({
         borrowedKeyId,
         isOpened: false,
+        receiverName: userDto.fullName,
       });
 
       await this.borrowedKeyRepository.save(preload, {
