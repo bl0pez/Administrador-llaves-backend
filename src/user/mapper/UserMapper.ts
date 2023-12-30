@@ -8,7 +8,7 @@ export abstract class UserMapper {
       .email(user.email)
       .fullName(user.fullName)
       .id(user.id)
-      .roles(user.roles)
+      .role(user.role)
       .updated_at(user.updated_at)
       .build();
   }

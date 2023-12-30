@@ -1,12 +1,13 @@
+import { Roles } from '@/utils/roles';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
+  IsEnum,
   IsString,
   Matches,
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { ValidRoles } from 'src/auth/interfaces';
 
 export class CreateUserDto {
   @ApiProperty()
@@ -31,10 +32,8 @@ export class CreateUserDto {
   password: string;
 
   @ApiProperty()
-  @IsString({ each: true })
-  @Matches(/^(admin|operador)$/, {
-    each: true,
-    message: `Los roles válidos son ${ValidRoles.ADMIN} y ${ValidRoles.USER}`,
+  @IsEnum(Roles, {
+    message: `El rol debe ser uno de los siguientes: ${Object.values(Roles)}`,
   })
-  roles: string[];
+  role: string;
 }

@@ -28,13 +28,8 @@ export class UserRoleGuard implements CanActivate {
 
     const req = context.switchToHttp().getRequest();
     const user = req.user as User;
-
     if (!user) throw new BadRequestException('User not found');
-
-    for (const role of user.roles) {
-      if (validRoles.includes(role)) return true;
-    }
-
+    if (validRoles.some((role) => user.role.includes(role))) return true;
     throw new ForbiddenException(
       `Usuario ${user.fullName} no autorizado para realizar esta acción`,
     );

@@ -53,7 +53,7 @@ export class AuthService {
         email: true,
         password: true,
         id: true,
-        roles: true,
+        role: true,
         fullName: true,
         updated_at: true,
         deleted_at: true,

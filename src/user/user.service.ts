@@ -84,6 +84,19 @@ export class UserService {
     }
   }
 
+  public async delete(id: string) {
+    try {
+      const user = await this.userRepository.findOneBy({
+        id: id,
+      });
+      if (!user) throw new BadRequestException('El usuario no existe');
+      await this.userRepository.softDelete(id);
+      return { message: 'Usuario eliminado' };
+    } catch (error) {
+      this.handleDBErrors(error);
+    }
+  }
+
   private handleDBErrors(error: any): never {
     if (error.code === '23505')
       throw new BadRequestException('El email ya existe');

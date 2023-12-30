@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -144,16 +145,27 @@ export class BorrowedKeyService {
   }
 
   public async close(borrowedKeyId: string) {
-    const preload = await this.borrowedKeyRepository.preload({
-      borrowedKeyId,
-      isOpened: false,
-    });
+    try {
+      const borrowedKey = await this.findById(borrowedKeyId);
 
-    if (!preload) throw new NotFoundException('Llave prestada no encontrada');
+      if (!borrowedKey)
+        throw new NotFoundException('Llave prestada no encontrada');
 
-    const borrowedKey = await this.borrowedKeyRepository.save(preload);
-    await this.keyService.updateBorrowed(borrowedKey.key.keyId, false);
+      const preload = await this.borrowedKeyRepository.preload({
+        borrowedKeyId,
+        isOpened: false,
+      });
 
-    return BorrowedKeyResponseMapper.toResponseBorrowedKeyDto(borrowedKey);
+      await this.borrowedKeyRepository.save(preload, {
+        reload: true,
+      });
+      await this.keyService.updateBorrowed(borrowedKey.key.keyId, false);
+
+      return { borrowedKeyId };
+    } catch (error) {
+      console.log(error);
+
+      throw new InternalServerErrorException('Error al cerrar la llave');
+    }
   }
 }

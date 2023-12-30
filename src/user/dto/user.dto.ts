@@ -13,7 +13,7 @@ export class UserDto {
   @ApiProperty()
   id: string;
   @ApiProperty()
-  roles: string[];
+  role: string;
   @ApiProperty()
   updated_at: Date | null;
 

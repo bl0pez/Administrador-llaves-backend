@@ -88,6 +88,10 @@ export class KeyService {
   }
 
   public async updateBorrowed(keyId: string, isBorrowed: boolean) {
-    return await this.keyRepository.update(keyId, { isBorrowed });
+    try {
+      return await this.keyRepository.update(keyId, { isBorrowed });
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

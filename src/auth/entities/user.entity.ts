@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { Key } from 'src/key/entities/key.entity';
 import { BorrowedKey } from 'src/borrowedKey/entities/borroweKey.entity';
+import { Roles } from '@/utils/roles';
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
@@ -34,10 +35,9 @@ export class User {
   password: string;
 
   @Column('text', {
-    array: true,
-    default: ['operador'],
+    default: Roles.USER,
   })
-  roles: string[];
+  role: string;
 
   @OneToMany(() => Key, (key) => key.user)
   keys: Key[];
