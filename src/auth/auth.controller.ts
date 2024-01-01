@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { CreateUserDto, LoginUserDto, AuthDto } from './dto';
+import { LoginUserDto, AuthDto } from './dto';
 import { Auth, GetUser } from './decorators';
 import { User } from './entities/user.entity';
 
@@ -17,15 +17,15 @@ import { User } from './entities/user.entity';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('register')
-  @ApiResponse({
-    status: 201,
-    description: 'El usuario ha sido creado exitosamente.',
-    type: AuthDto,
-  })
-  create(@Body() createUserDto: CreateUserDto): Promise<AuthDto> {
-    return this.authService.create(createUserDto);
-  }
+  // @Post('register')
+  // @ApiResponse({
+  //   status: 201,
+  //   description: 'El usuario ha sido creado exitosamente.',
+  //   type: AuthDto,
+  // })
+  // create(@Body() createUserDto: CreateUserDto): Promise<AuthDto> {
+  //   return this.authService.create(createUserDto);
+  // }
 
   @Post('login')
   @ApiResponse({
