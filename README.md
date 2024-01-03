@@ -2,13 +2,21 @@
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-# NestJS API
+# Administrador de llaves backend
 
 ## Descripción
-Este repositorio sirve como un esqueleto inicial para proyectos basados en NestJS. Proporciona una estructura de directorios y archivos básica, así como configuraciones iniciales comunes para ayudarte a comenzar rápidamente con el desarrollo de tu aplicación NestJS.
+
+Este proyecto es un administrador de llaves, el cual cuenta con las siguientes características:
+
+- ✅ Sistema de autenticación
+- ✅ Creación de usuarios
+- ✅ Edición de usuarios
+- ✅ Eliminación de usuarios
+- ✅ Sistema de roles
+- ✅ Creación de llaves
+- ✅ Edición de llaves
+- ✅ Creación de prestamos de llaves
+- ✅ Historial de prestamos de llaves
 
 ## Instalación
 
@@ -20,4 +28,5 @@ Este repositorio sirve como un esqueleto inicial para proyectos basados en NestJ
 6. Ejecuta `npm run start:dev` para levantar el servidor de desarrollo.
 
 ## Documentación de la API
+
 - [Swagger](http://localhost:3000/api)
