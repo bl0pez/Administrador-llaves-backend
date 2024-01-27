@@ -1,9 +1,10 @@
+import * as fs from 'fs';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Key } from './entities/key.entity';
 import { UserDto } from 'src/user/dto';
-import { CreateKeyDto } from './dto';
+import { CreateKeyDto, UpdateKeyDto } from './dto';
 import { KeyResponseMapper } from './mapper/KeyResponseMapper';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { ResponseKeyDto } from './dto/response-key.dto';
@@ -78,6 +79,32 @@ export class KeyService {
     return KeyResponseMapper.toResponseKeysDto(keys);
   }
 
+  public async update(
+    keyId: string,
+    updateKeyDto: UpdateKeyDto,
+    file: Express.Multer.File,
+  ) {
+    const preload = await this.keyRepository.preload({
+      keyId,
+      ...updateKeyDto,
+    });
+
+    if (!preload) throw new BadRequestException('La llave no existe');
+
+    if (file) {
+      preload.image = file.filename;
+      fs.unlinkSync(`./public/uploads/${updateKeyDto.image}`);
+    }
+
+    await this.keyRepository.save(preload);
+    const key = await this.keyRepository.findOne({
+      where: { keyId },
+      relations: ['user'],
+    });
+
+    return KeyResponseMapper.toResponseKeyDto(key);
+  }
+
   public async checkAvailability() {
     return await this.keyRepository.find({
       where: {
@@ -93,5 +120,13 @@ export class KeyService {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  public async delete(keyId: string) {
+    const key = await this.keyRepository.findOne({ where: { keyId } });
+
+    if (!key) throw new BadRequestException('La llave no existe');
+
+    await this.keyRepository.softDelete(keyId);
   }
 }

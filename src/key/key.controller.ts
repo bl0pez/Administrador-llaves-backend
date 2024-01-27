@@ -1,8 +1,11 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpStatus,
+  Param,
+  Patch,
   Post,
   Query,
   UploadedFile,
@@ -14,7 +17,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { CreateKeyDto } from './dto';
+import { CreateKeyDto, UpdateKeyDto } from './dto';
 import { Auth, GetUser } from 'src/auth/decorators';
 import { User } from 'src/auth/entities/user.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -71,5 +74,34 @@ export class KeyController {
   @Get('available')
   public async getAvailableKeys() {
     return this.keyService.checkAvailability();
+  }
+
+  @Patch('update/:keyId')
+  @ApiConsumes('multipart/form-data')
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    type: ResponseKeyDto,
+  })
+  @UseInterceptors(
+    FileInterceptor('file', {
+      fileFilter: fileFilter,
+      limits: { fileSize: 1024 * 1024 * 5 }, // 5MB
+      storage: diskStorage({
+        destination: './public/uploads',
+        filename: fileNamer,
+      }),
+    }),
+  )
+  public async update(
+    @Param('keyId') keyId: string,
+    @Body() updateKeyDto: UpdateKeyDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.keyService.update(keyId, updateKeyDto, file);
+  }
+
+  @Delete('delete/:keyId')
+  public async delete(@Param('keyId') keyId: string) {
+    return this.keyService.delete(keyId);
   }
 }

@@ -164,8 +164,6 @@ export class BorrowedKeyService {
 
       return { borrowedKeyId };
     } catch (error) {
-      console.log(error);
-
       throw new InternalServerErrorException('Error al cerrar la llave');
     }
   }
